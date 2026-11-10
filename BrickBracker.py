@@ -20,3 +20,5 @@ pygame.display.set_caption("Block Breaker")
 # to control the frame rate
 clock = pygame.time.Clock()
 FPS = 30
+
+
