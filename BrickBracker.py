@@ -103,3 +103,99 @@ class Block:
         return self.health
 
 
+# Ball Class
+class Ball:
+    def __init__(self, posx, posy, radius, speed, color):
+        self.posx, self.posy = posx, posy
+        self.radius = radius
+        self.speed = speed
+        self.color = color
+        self.xFac, self.yFac = 1, 1
+
+        self.ball = pygame.draw.circle(
+            screen, self.color, (self.posx,
+                                 self.posy), self.radius)
+
+    # Used to display the object on the screen
+    def display(self):
+        self.ball = pygame.draw.circle(
+            screen, self.color, (self.posx, 
+                                 self.posy), self.radius)
+
+    # Used to update the state of the object
+    def update(self):
+        self.posx += self.xFac*self.speed
+        self.posy += self.yFac*self.speed
+
+        # Reflecting the ball if it touches
+        # either of the vertical edges
+        if self.posx <= 0 or self.posx >= WIDTH:
+            self.xFac *= -1
+
+        # Reflection from the top most edge of the screen
+        if self.posy <= 0:
+            self.yFac *= -1
+
+        # If the ball touches the bottom most edge of 
+        # the screen, True value is returned
+        if self.posy >= HEIGHT:
+            return True
+
+        return False
+
+    # Resets the position of the ball
+    def reset(self):
+        self.posx = 0
+        self.posy = HEIGHT
+        self.xFac, self.yFac = 1, -1
+
+    # Used to change the direction along Y axis
+    def hit(self):
+        self.yFac *= -1
+
+    # Returns the rect of the ball. In this case,
+    # it is the ball itself
+    def getRect(self):
+        return self.ball
+
+# Helper Functions
+
+# Function used to check collisions between any two entities
+
+
+def collisionChecker(rect, ball):
+    if pygame.Rect.colliderect(rect, ball):
+        return True
+
+    return False
+
+
+# Function used to populate the blocks
+def populateBlocks(blockWidth, blockHeight, 
+                   horizontalGap, verticalGap):
+    listOfBlocks = []
+
+    for i in range(0, WIDTH, blockWidth+horizontalGap):
+        for j in range(0, HEIGHT//2, blockHeight+verticalGap):
+            listOfBlocks.append(
+                Block(i, j, blockWidth, blockHeight, 
+                      random.choice([WHITE, GREEN])))
+
+    return listOfBlocks
+
+
+# Once all the lives are over, this function waits until
+# exit or space bar is pressed and does the corresponding action
+def gameOver():
+    gameOver = True
+
+    while gameOver:
+        # Event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return True
+
+
