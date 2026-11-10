@@ -21,7 +21,6 @@ pygame.display.set_caption("Block Breaker")
 clock = pygame.time.Clock()
 FPS = 30
 
-
 # Striker class
 class Striker:
     def __init__(self, posx, posy, width, height, speed, color):
